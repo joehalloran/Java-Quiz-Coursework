@@ -135,7 +135,7 @@ public class QuizMaster implements ActionListener{
             if (currentAnswer == null) {
                 // No answer given
                 // Tell user and reask question
-                JOptionPane.showMessageDialog(null, "Please pick an answer or press skip");
+                JOptionPane.showMessageDialog(null, "You have not answered the current question.\n" + "You may skip the question and return to it later on.");
                 questionCounter--;
                 nextQuestion();
             } else {
@@ -250,7 +250,19 @@ public class QuizMaster implements ActionListener{
             answerList[counter] = (String)answerStack.pop(); // Typecast to string
             counter++;
         }
+        jumbleAnswers(answerList);
         return answerList;
+    }
+
+    private void jumbleAnswers(String[] answers) {
+        // Shuffle the answers 50 times
+        for(int i = 0; i < 50; i++){
+            int swapItemOne = (int) Math.floor(Math.random() * answers.length);
+            int swapItemTwo = (int) Math.floor(Math.random() * answers.length);
+            String temp = answers[swapItemOne];
+            answers[swapItemOne] = answers[swapItemTwo];
+            answers[swapItemTwo] = temp;
+        }
     }
 
     private void updateMistakeReport() {
