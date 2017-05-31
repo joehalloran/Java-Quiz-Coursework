@@ -5,10 +5,11 @@ import javax.swing.*;
  */
 public class Quiz {
 
-    static int score = 0;
-
     public static void main(String[] args) {
+        Quiz quiz = new Quiz();
+    }
 
+    public Quiz() {
         JFrame frame = new JFrame();
 
         Object[] options = {"Easy", "Hard", "Quit"};
@@ -35,10 +36,9 @@ public class Quiz {
         }
 
         runQuiz(selection);
-
     }
 
-    public static void runQuiz(int difficulty) {
+    public void runQuiz(int difficulty) {
         String[] questions;
         String[] correctAnswers;
         String[][] wrongAnswers;
@@ -61,9 +61,6 @@ public class Quiz {
                 questions, // question text array
                 correctAnswers, // correct answers array
                 wrongAnswers); // wrong answers 2D array
-
-
-
     }
 
     public static void die() {

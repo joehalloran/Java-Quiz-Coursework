@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +15,7 @@ public class QuizMaster implements ActionListener{
     public int questionCounter; // Question index
     public boolean skippingQuestions; // Is skipping allowed - on/off
 
-    public String currentAnswer; // Current selected answer (radio button)
+    public String currentAnswer = null; // Current selected answer (radio button)
 
     // Data structures for questions and answers
     public String[] questions;
@@ -25,11 +26,11 @@ public class QuizMaster implements ActionListener{
     int maxLenghtWrongAnswersSubArray = 0;
 
     // Data structures for skipped and incorrectly answered questions
-    public Stack mistakes = new Stack();
+    public String mistakesReport = "";
     public Stack skipped = new Stack();
 
     // Display Frame for quiz
-    public JFrame frame = new JFrame("Joe's quiz");
+    public JFrame frame = new JFrame();
 
     public QuizMaster(String quizTitle, String[] questionInput, String[] correctAnswerInput, String[][] wrongAnswersInput){
 
@@ -48,14 +49,23 @@ public class QuizMaster implements ActionListener{
 
     public void askQuestion(String questionText, String correctAnswer, String[] wrongAnswers) {
 
-        // Setup panel
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0,1));
-        JLabel label = new JLabel();
+        // Setup panels
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
 
-        // Add question text
-        label.setText(questionText);
-        panel.add(label);
+        JPanel questionPanel = new JPanel();
+        questionPanel.setLayout(new GridLayout(0,1));
+
+        JPanel answersPanel = new JPanel();
+        answersPanel.setLayout(new GridLayout(0,1));
+
+        JPanel controlsPanel = new JPanel();
+        controlsPanel.setLayout(new FlowLayout());
+
+
+        // Create question text label
+        JLabel questionLabel = new JLabel();
+        questionLabel.setText(questionText);
 
         // Create "OK" button
         JButton submitButton  = new JButton();
@@ -69,11 +79,11 @@ public class QuizMaster implements ActionListener{
         skipButton.setActionCommand("skip");
         skipButton.addActionListener(this);
 
-        // Create "Skip" button
-        JButton quitButton  = new JButton();
-        quitButton.setText("Quit");
-        quitButton.setActionCommand("quit");
-        quitButton.addActionListener(this);
+        // Create "Quit" button
+        JButton restartButton  = new JButton();
+        restartButton.setText("Restart");
+        restartButton.setActionCommand("restart");
+        restartButton.addActionListener(this);
 
         // Create radio buttons for answers
         String[] allAnswers = combineAnswers(correctAnswer, wrongAnswers);
@@ -84,21 +94,33 @@ public class QuizMaster implements ActionListener{
             answerButtons[i].setText(allAnswers[i]);
             answerButtons[i].addActionListener(this);
             answerGroup.add(answerButtons[i]);
-            panel.add(answerButtons[i]);
+            answersPanel.add(answerButtons[i]);
         }
 
         // Add "OK", "Skip" and "Quit" buttons
-        panel.add(submitButton);
-        // Add skip button, if skipping allowed
+        controlsPanel.add(submitButton);
+        // Handle GUI for skipping
         if (skippingQuestions) {
-            panel.add(skipButton);
+            // Add skip button, if skipping allowed
+            controlsPanel.add(skipButton);
+        } else {
+            // If answering skipped questions tell user
+            JLabel skipLabel = new JLabel();
+            skipLabel.setText("Skipped Question " + (questionCounter + 1) + "/" + questions.length);
+            questionPanel.add(skipLabel);
         }
-        panel.add(quitButton);
+        controlsPanel.add(restartButton);
 
+        questionPanel.add(questionLabel);
         // Load frame
-        frame.add(panel);
+        mainPanel.add(questionPanel, BorderLayout.NORTH);
+        mainPanel.add(answersPanel, BorderLayout.CENTER);
+        mainPanel.add(controlsPanel, BorderLayout.SOUTH);
+
+        frame.add(mainPanel);
         frame.pack();
-        frame.setSize(800, 600);
+        frame.setSize(400, 300);
+        frame.setLocationRelativeTo(null);  // Centre frame in window
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -110,8 +132,17 @@ public class QuizMaster implements ActionListener{
 
         // Handle all button clicks
         if (command.equalsIgnoreCase("submit")) {
-            checkAnswer();
-            nextQuestion();
+            if (currentAnswer == null) {
+                // No answer given
+                // Tell user and reask question
+                JOptionPane.showMessageDialog(null, "Please pick an answer or press skip");
+                questionCounter--;
+                nextQuestion();
+            } else {
+                // Process answer and move on
+                checkAnswer();
+                nextQuestion();
+            }
         } else if (command.equalsIgnoreCase("skip")) {
             // Update max sub array length for quiz reset later
             if (wrongAnswers[questionCounter].length > maxLenghtWrongAnswersSubArray) {
@@ -119,9 +150,11 @@ public class QuizMaster implements ActionListener{
             }
             skipped.push(questionCounter);
             nextQuestion();
-        } else if (command.equalsIgnoreCase("quit")) {
+        } else if (command.equalsIgnoreCase("restart")) {
+            // Start again;
             frame.dispose();
-            endQuiz();
+            Quiz quiz = new Quiz();
+
         } else {
             // The user has not pressed submit, skip, or quit, so must have selected a new answer.
             currentAnswer = command;
@@ -131,13 +164,14 @@ public class QuizMaster implements ActionListener{
     // Ask next question or end quiz if no questions left
     public void nextQuestion(){
         frame.dispose();
+        currentAnswer = null;
         questionCounter++;
         System.out.println(questionCounter);
         if (questionCounter < correctAnswers.length) {
             frame = new JFrame("Joe's quiz");
             askQuestion(questions[questionCounter], correctAnswers[questionCounter], wrongAnswers[questionCounter]);
         } else if (skippingQuestions && !(skipped.empty())) {
-            // Begin answering the skipping quesions
+            // Begin answering the skipping questions
             resetQuizForSkippedQuestions();
         } else {
             endQuiz();
@@ -176,20 +210,13 @@ public class QuizMaster implements ActionListener{
     }
 
     public void endQuiz(){
-        // Generate mistakes report
-        String mistakesReport = "";
-        if (!mistakes.empty()) {
-            mistakesReport = "\nMISTAKE REPORT\n";
-            int mistake;
-            while (mistakes.size() > 0) {
-                mistake = (int)mistakes.pop(); // Typecast to int
-                System.out.println(mistake);
-                mistakesReport = mistakesReport + mistake + ": " + questions[mistake] + "\n Correct answer: " + correctAnswers[mistake] + "\n";
-                System.out.println(mistakesReport);
-            }
-        }
         // Output final message
-        JOptionPane.showMessageDialog(null, "Your have scored = " + score + " points.\n This is equivalent to " + (score * 10) + "% \n" + mistakesReport + "\n Well Done!");
+        String finalMessage =  "Your have scored = " + score + " points.\n This is equivalent to " + (score * 10) + "% \n";
+        if (mistakesReport.length() > 0) {
+            finalMessage = finalMessage + "\nMISTAKES:\n" + mistakesReport;
+        }
+        finalMessage = finalMessage +  "\n Well Done!";
+        JOptionPane.showMessageDialog(null, finalMessage);
         System.exit(0);
     }
 
@@ -200,7 +227,7 @@ public class QuizMaster implements ActionListener{
             score = score + 1;
         } else {
             // Wrong
-            mistakes.push(questionCounter);
+            updateMistakeReport();
         }
     }
 
@@ -224,6 +251,10 @@ public class QuizMaster implements ActionListener{
             counter++;
         }
         return answerList;
+    }
+
+    private void updateMistakeReport() {
+        mistakesReport = mistakesReport + "Q: " + questions[questionCounter] + "\n Correct answer: " + correctAnswers[questionCounter] + "\n";
     }
 
 }
