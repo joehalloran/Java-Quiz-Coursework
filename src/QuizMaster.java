@@ -7,36 +7,41 @@ import java.util.Stack;
 
 
 /**
- * Created by j.halloran on 30/05/2017.
+ * Handles asking of questions and process answers.
+ * Includes UI
+ * Also facilitates skipping of questions and will report wrong answers at the end of the quiz
  */
 public class QuizMaster implements ActionListener{
 
+    /**
+     * Attributes
+     */
     public int score;
-    public int questionCounter; // Question index
-    public boolean skippingQuestions; // Is skipping allowed - on/off
+    public int questionCounter;                 // Question index
+    public boolean skippingQuestions;
 
-    public String currentAnswer = null; // Current selected answer (radio button)
+    public String currentAnswer = null;         // Current selected answer (radio buttons)
 
-    // Data structures for questions and answers
     public String[] questions;
     public String[] correctAnswers;
     public String[][] wrongAnswers;
 
-    // A place holder array to handle quiz reset for cases where a different number of answers are supplied for different questions
-    int maxLenghtWrongAnswersSubArray = 0;
+    int maxLenghtWrongAnswersSubArray = 0;     // Used in quiz reset to handle jagged 2D array of wrong answers
 
-    // Data structures for skipped and incorrectly answered questions
     public String mistakesReport = "";
     public Stack skipped = new Stack();
 
-    // Display Frame for quiz
     public JFrame frame = new JFrame();
 
-    public QuizMaster(String quizTitle, String[] questionInput, String[] correctAnswerInput, String[][] wrongAnswersInput){
+    /**
+     * Constructor intialises essential attributes
+     */
+    public QuizMaster(String quizTitle,
+                      String[] questionInput,
+                      String[] correctAnswerInput,
+                      String[][] wrongAnswersInput){
 
         frame.setTitle(quizTitle);
-
-        // Initialise variables with contructor parameters
         skippingQuestions = true;
         questionCounter = 0;
         questions = questionInput;
@@ -47,6 +52,9 @@ public class QuizMaster implements ActionListener{
 
     }
 
+    /**
+     * Builds the question asking UI for each question
+     */
     public void askQuestion(String questionText, String correctAnswer, String[] wrongAnswers) {
 
         // Setup panels
@@ -61,7 +69,6 @@ public class QuizMaster implements ActionListener{
 
         JPanel controlsPanel = new JPanel();
         controlsPanel.setLayout(new FlowLayout());
-
 
         // Create question text label
         JLabel questionLabel = new JLabel();
@@ -119,71 +126,72 @@ public class QuizMaster implements ActionListener{
 
         frame.add(mainPanel);
         frame.pack();
-        frame.setSize(400, 300);
+        frame.setSize(600, 300);
         frame.setLocationRelativeTo(null);  // Centre frame in window
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 
+    /**
+     * Handles all button clicks
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
 
-        // Handle all button clicks
+        String command = e.getActionCommand();
         if (command.equalsIgnoreCase("submit")) {
-            if (currentAnswer == null) {
-                // No answer given
-                // Tell user and reask question
-                JOptionPane.showMessageDialog(null, "You have not answered the current question.\n" + "You may skip the question and return to it later on.");
-                questionCounter--;
-                nextQuestion();
-            } else {
-                // Process answer and move on
+            if (currentAnswer == null) {     // No answer given, prompt user to answer
+                String userPrompt = "You have not answered the current question.";
+                userPrompt = userPrompt + "\nYou may skip the question and return to it later on.";
+                JOptionPane.showMessageDialog(null, userPrompt );
+            } else {                         // Answer supplied, process and move on
                 checkAnswer();
                 nextQuestion();
             }
-        } else if (command.equalsIgnoreCase("skip")) {
-            // Update max sub array length for quiz reset later
+        } else if (command.equalsIgnoreCase("skip")) {      // User presses skip
+            // Used to handle jagged 2D in case of quiz reset
             if (wrongAnswers[questionCounter].length > maxLenghtWrongAnswersSubArray) {
                 maxLenghtWrongAnswersSubArray = wrongAnswers[questionCounter].length;
             }
+            // Add to skipped stack
             skipped.push(questionCounter);
             nextQuestion();
-        } else if (command.equalsIgnoreCase("restart")) {
-            // Start again;
+        } else if (command.equalsIgnoreCase("restart")) {       // Reset. Back to start screen
             frame.dispose();
             Quiz quiz = new Quiz();
 
-        } else {
-            // The user has not pressed submit, skip, or quit, so must have selected a new answer.
+        } else {            // The user has not pressed submit, skip, or quit, so must have selected a new answer.
             currentAnswer = command;
         }
     }
 
-    // Ask next question or end quiz if no questions left
+    /**
+     * Ask next question or end quiz if no questions left
+     */
     public void nextQuestion(){
         frame.dispose();
-        currentAnswer = null;
+        currentAnswer = null;       // Nulled to allow prompt if no answer is selected
         questionCounter++;
         System.out.println(questionCounter);
-        if (questionCounter < correctAnswers.length) {
+        if (questionCounter < correctAnswers.length) {              // Next question
             frame = new JFrame("Joe's quiz");
             askQuestion(questions[questionCounter], correctAnswers[questionCounter], wrongAnswers[questionCounter]);
-        } else if (skippingQuestions && !(skipped.empty())) {
-            // Begin answering the skipping questions
+        } else if (skippingQuestions && !(skipped.empty())) {       // Begin answering the skipping questions
             resetQuizForSkippedQuestions();
-        } else {
+        } else {                                                    // End quiz
             endQuiz();
         }
     }
 
+    /**
+     * Handles reset of quiz to re-ask skipped questions
+     */
     private void resetQuizForSkippedQuestions() {
-
-        skippingQuestions = false; // Turn off skipping
+        skippingQuestions = false;      // Turn off skipping
 
         // Create new data structures for skipped Questions
-        int stackSize = skipped.size(); // Cache variable
+        int stackSize = skipped.size();         // Cache for array lengths
         String[] skippedQuestions = new String[stackSize];
         String[] skippedCorrectAnswers = new String[stackSize];
         String[][] skippedWrongAnswers = new String[stackSize][maxLenghtWrongAnswersSubArray];
@@ -204,44 +212,52 @@ public class QuizMaster implements ActionListener{
         questions = skippedQuestions;
         correctAnswers = skippedCorrectAnswers;
         wrongAnswers = skippedWrongAnswers;
-        questionCounter = -1; // Reset to -1 as nextQuestion() will increment to 0
+        questionCounter = -1;       // Reset to -1 as nextQuestion() will increment to 0
         nextQuestion();
-
     }
 
+    /**
+     * Generates a report for users at the end of the quiz
+     */
     public void endQuiz(){
-        // Output final message
-        String finalMessage =  "Your have scored = " + score + " points.\n This is equivalent to " + (score * 10) + "% \n";
+        // Add final score to message
+        String finalMessage =  "Your have scored = "+score+" points.\n This is equivalent to " + (score * 10) + "% \n";
+        // Show mistakes (if any made)
         if (mistakesReport.length() > 0) {
             finalMessage = finalMessage + "\nMISTAKES:\n" + mistakesReport;
         }
         finalMessage = finalMessage +  "\n Well Done!";
         JOptionPane.showMessageDialog(null, finalMessage);
-        System.exit(0);
+
+        // Start again
+        frame.dispose();
+        Quiz quiz = new Quiz();
     }
 
-    // Check answers and handle correct and incorrect answers
+    /**
+     * Check answers and handle correct and incorrect answers
+     */
     private void checkAnswer() {
-        if (currentAnswer == correctAnswers[questionCounter]) {
-            // Correct
+        if (currentAnswer == correctAnswers[questionCounter]) {     // Correct
             score = score + 1;
-        } else {
-            // Wrong
+        } else {                                                    // Wrong
             updateMistakeReport();
         }
     }
 
+    /**
+     * Combines the correct answer and wrong answers into a single array
+     * to allow creation of radio buttons
+     */
     private String[] combineAnswers(String correctAnswer, String[] wrongAnswers) {
-
+        // Use a stack to allow for variable lengths of wrong answer arrays
         Stack answerStack = new Stack();
         for (int i = 0; i < wrongAnswers.length; i++) {
-            // check for null values which may exist in jagged arrays
-            if (wrongAnswers[i] != null) {
+            if (wrongAnswers[i] != null) {      // check for null values which may exist in jagged arrays
                 answerStack.push(wrongAnswers[i]);
             }
         }
-        // Add correct answer to stack
-        answerStack.push(correctAnswer);
+        answerStack.push(correctAnswer);        // Add correct answer to stack
 
         // Unpack stack into an array
         String[] answerList = new String[answerStack.size()];
@@ -250,10 +266,14 @@ public class QuizMaster implements ActionListener{
             answerList[counter] = (String)answerStack.pop(); // Typecast to string
             counter++;
         }
-        jumbleAnswers(answerList);
+        jumbleAnswers(answerList);          // Randomise order of answers
         return answerList;
     }
 
+    /**
+     * Randomises the answer array so it appears differently for each users
+     * Behaves like a shuffle cards (swaps two randomly selected items)
+     */
     private void jumbleAnswers(String[] answers) {
         // Shuffle the answers 50 times
         for(int i = 0; i < 50; i++){
@@ -265,8 +285,12 @@ public class QuizMaster implements ActionListener{
         }
     }
 
+    /**
+     * Add incorrect answers to the mistakeReport for display at end of quiz
+     */
     private void updateMistakeReport() {
-        mistakesReport = mistakesReport + "Q: " + questions[questionCounter] + "\n Correct answer: " + correctAnswers[questionCounter] + "\n";
+        mistakesReport = mistakesReport + "Q: " + questions[questionCounter];
+        mistakesReport = mistakesReport + "\nCorrect answer: " + correctAnswers[questionCounter] + "\n";
     }
 
 }

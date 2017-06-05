@@ -1,3 +1,0 @@
-q1WrongA,q1WrongB,q1WrongC,q1WrongD
-q2WrongA,q2WrongB,q2WrongC
-q3WrongA,q3WrongB,q3WrongC
