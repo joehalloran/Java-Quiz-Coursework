@@ -79,7 +79,7 @@ Some of the worst offenders are:
 
 |Num    |Test       |Method         |Expected Result        |Actual Result          |Evidence       |
 |-------|-----------|---------------|-----------------------|-----------------------|---------------|
-|1    |"Easy" button returns easy questions  |Click on "Easy" in home screen         |Q1 is "What is cabin fever?"        |As expected          |[Img](Assets/test1.png)       |
+|1    |"Easy" button returns easy questions  |Click on "Easy" in home screen         |Q1 is "What is cabin fever?"        |As expected          |[Screenshot](Assets/Test1.PNG)       |
 |2    |"Hard" button returns hard questions  |Click on "Hard" in home screen         |Q1 is "Who likes cheese the most?"        |As expected          |Img       |
 |3    |"Quit" buttons exits gracefully       |Click "Quit" in home screen   |"Thanks for playing" dialogue displayed        |As expected          |Img       |
 |4    |"OK" submits answer when question selected  |Choose all correct answers         |100% final score        |As expected          |Img       |
