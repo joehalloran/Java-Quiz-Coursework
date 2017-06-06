@@ -52,9 +52,9 @@ The project could be improved in the following ways.
 
 ### 2.1     Alternative strategy for processing question and answer data
 
-The additional code to allow for any number of questions or answers obfuscates some of the code and uses additional data structures in a clunky way (e.g. `Stack` in `FileHandler.readFile()` method).
+The additional functionality (to allow for any number of questions or answers) obfuscates some of the code and uses additional data structures in a clunky way (e.g. `Stack` in `FileHandler.readFile()` method).
 
-This could have been avoided if question and answer data was handled in a more sophisticated way. This could include.
+This could have been avoided if question and answer data was handled in a more sophisticated way. This could include:
 * Use of an `List` or `ArrayList`.
     * These dynamic data structures may be better able to cope with varying data sizes.
     * These was beyond the scope of the course and I am not sure exactly how to implement these.
@@ -79,7 +79,7 @@ Some of the worst offenders are:
 
 |Num    |Test       |Method         |Expected Result        |Actual Result          |Evidence       |
 |-------|-----------|---------------|-----------------------|-----------------------|---------------|
-|1    |"Easy" button returns easy questions  |Click on "Easy" in home screen         |Q1 is "What is cabin fever?"        |As expected          |Img       |
+|1    |"Easy" button returns easy questions  |Click on "Easy" in home screen         |Q1 is "What is cabin fever?"        |As expected          |[Img](Assets/test1.png)       |
 |2    |"Hard" button returns hard questions  |Click on "Hard" in home screen         |Q1 is "Who likes cheese the most?"        |As expected          |Img       |
 |3    |"Quit" buttons exits gracefully       |Click "Quit" in home screen   |"Thanks for playing" dialogue displayed        |As expected          |Img       |
 |4    |"OK" submits answer when question selected  |Choose all correct answers         |100% final score        |As expected          |Img       |
