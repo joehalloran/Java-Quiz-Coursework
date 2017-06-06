@@ -173,7 +173,6 @@ public class QuizMaster implements ActionListener{
         frame.dispose();
         currentAnswer = null;       // Nulled to allow prompt if no answer is selected
         questionCounter++;
-        System.out.println(questionCounter);
         if (questionCounter < correctAnswers.length) {              // Next question
             frame = new JFrame("Joe's quiz");
             askQuestion(questions[questionCounter], correctAnswers[questionCounter], wrongAnswers[questionCounter]);

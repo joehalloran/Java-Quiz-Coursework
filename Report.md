@@ -38,13 +38,13 @@ These additional features required some additional code to process variable data
     * Uses a `Stack` to check number of questions before initialising and populating a fixed length `String[]` array.
 * `FileHandler.getTextAs2DArray()`
     * Requires two loops. One to check maximum length before initialising the array, and then another loop to populate the array.
-* `QizMaster.combineAnswers()`
+* `QuizMaster.combineAnswers()`
     * Uses a `Stack` to check number of answers before initialising and populating a fixed length `String[]` array.
 
 #### 1.2.2 Randomises answers for display
 Answer options are displayed in a random order each time a question is asked. This is implemented by:
 
-`QuizMaster.jumbleAnswers()`
+* `QuizMaster.jumbleAnswers()`
 
 ## 2       Critical evaluation
 
@@ -58,8 +58,8 @@ This could have been avoided if question and answer data was handled in a more s
 * Use of an `List` or `ArrayList`.
     * These dynamic data structures may be better able to cope with varying data sizes.
     * These was beyond the scope of the course and I am not sure exactly how to implement these.
-* Use of additional classes / objects (e.g. Question or WrongAnswer class)
-    * This could allow more clarity, by making data structure a part of of the object oriented structure.
+* Use of additional classes / objects (e.g. `Question` or `WrongAnswer` class)
+    * This could allow more clarity, by making data structure a part of the object oriented structure.
 
 ### 2.2     User interface
 
@@ -79,6 +79,10 @@ Some of the worst offenders are:
 
 |Num    |Test       |Method         |Expected Result        |Actual Result          |Evidence       |
 |-------|-----------|---------------|-----------------------|-----------------------|---------------|
-|       |           |               |                       |                       |               |
-|       |           |               |                       |                       |               |
-|       |           |               |                       |                       |               |
+|1    |"Easy" button returns easy questions  |Click on "Easy" in home screen         |Q1 is "What is cabin fever?"        |As expected          |Img       |
+|2    |"Hard" button returns easy questions  |Click on "Hard" in home screen         |Q1 is "Who likes cheese the most?"        |As expected          |Img       |
+|3    |"Quit" buttons exits gracefully       |Click "Quit" in home screen   |"Thanks for playing" dialogue displayed        |As expected          |Img       |
+|4    |"OK" submits answer when question selected  |Choose all correct answers         |100% final score        |As expected          |Img       |
+|5   |User prompted if "OK" clicked and no answer selected |Click "OK" without answer selected         |Dialogue prompt appears       |As expected          |Img      |
+|6    |"Restart" button returns to home screen       |Click on "Restart" button         |Home screen dialogue appears        |As expected          |Evidence       |
+|Num    |Test       |Method         |Expected Result        |Actual Result          |Evidence       |
