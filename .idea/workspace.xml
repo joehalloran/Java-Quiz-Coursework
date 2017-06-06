@@ -44,14 +44,28 @@
           </provider>
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="499">
-                <caret line="81" column="175" selection-start-line="81" selection-start-column="175" selection-end-line="81" selection-end-column="175" />
+              <first_editor relative-caret-position="703">
+                <caret line="93" column="207" selection-start-line="93" selection-start-column="207" selection-end-line="93" selection-end-column="207" />
                 <folding />
               </first_editor>
               <second_editor>
                 <js_state />
               </second_editor>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test2.PNG" pinned="false" current-in-tab="false">
+        <entry file="file:$PROJECT_DIR$/../../../../../..//$PROJECT_DIR$/Assets/test2.PNG">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test1.PNG" pinned="false" current-in-tab="false">
+        <entry file="file:$PROJECT_DIR$/../../../../../..//$PROJECT_DIR$/Assets/test1.PNG">
+          <provider selected="true" editor-type-id="images">
+            <state />
           </provider>
         </entry>
       </file>
@@ -525,8 +539,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:$PROJECT_DIR$/../../../../../../ada-fs02.ada.adacollege.org.uk/studenthome$/J.Halloran/Documents/IntelliJ/Quiz/src/QuizMaster.java" />
-    <entry file="file:$PROJECT_DIR$/../../../../../../ada-fs02.ada.adacollege.org.uk/studenthome$/J.Halloran/Documents/IntelliJ/Quiz/questions-hard.txt" />
     <entry file="file:$PROJECT_DIR$/../../../../../../ada-fs02.ada.adacollege.org.uk/studenthome$/J.Halloran/Documents/IntelliJ/Quiz/correct-answer-hard.txt" />
     <entry file="file:$PROJECT_DIR$/../../../../../../ada-fs02.ada.adacollege.org.uk/studenthome$/J.Halloran/Documents/IntelliJ/Quiz/wrong-answers-hard.txt" />
     <entry file="file:$PROJECT_DIR$/../../../../../../ada-fs02.ada.adacollege.org.uk/studenthome$/J.Halloran/Documents/IntelliJ/Quiz/src/FileHandler.java" />
@@ -582,6 +594,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:$PROJECT_DIR$/../../../../../..//$PROJECT_DIR$/Assets/test1.PNG">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file:$PROJECT_DIR$/../../../../../..//$PROJECT_DIR$/Assets/test2.PNG">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file:$PROJECT_DIR$/../../../../../..//$PROJECT_DIR$/Report.md">
       <provider editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -594,8 +616,8 @@
       </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="499">
-            <caret line="81" column="175" selection-start-line="81" selection-start-column="175" selection-end-line="81" selection-end-column="175" />
+          <first_editor relative-caret-position="703">
+            <caret line="93" column="207" selection-start-line="93" selection-start-column="207" selection-end-line="93" selection-end-column="207" />
             <folding />
           </first_editor>
           <second_editor>
