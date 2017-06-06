@@ -34,7 +34,7 @@ The quiz is made of 10 questions in each difficulty mode, but could accommodate:
 
 These additional features required some additional code to process variable data sizes into arrays. Examples of this additional code can be found in these methods:
 
-* FileHandler.readFile()
+* `FileHandler.readFile()`
     * Uses a ```Stack``` to check number of questions before initialising and populating a fixed length ```String[]``` array.
 * FileHandler.getTextAs2DArray()
     * Requires two loops. One to check maximum length before initialising the array, and then another loop to populate the array.
